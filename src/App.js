@@ -1,17 +1,24 @@
 import { useState, useEffect } from "react";
-import { format, fromUnixTime } from "date-fns";
 import "./App.css";
+import Post from "./Post";
 
 export default function App() {
-  const [posts, setPosts] = useState([]);
-  const [url, setUrl] = useState([
+  const urls = [
     "http://www.mocky.io/v2/59b3f0b0100000e30b236b7e",
-  ]);
-  // const urls = [
-  //   "http://www.mocky.io/v2/59b3f0b0100000e30b236b7e",
-  //   "http://www.mocky.io/v2/59ac28a9100000ce0bf9c236",
-  //   "http://www.mocky.io/v2/59ac293b100000d60bf9c239",
-  // ];
+    "http://www.mocky.io/v2/59ac28a9100000ce0bf9c236",
+    "http://www.mocky.io/v2/59ac293b100000d60bf9c239",
+  ];
+  const [posts, setPosts] = useState([]);
+  const [url, setUrl] = useState([urls[0]]);
+
+  useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data.posts);
+      })
+      .catch((err) => console.log(err));
+  }, [url]);
 
   const sortArray = (type) => {
     const types = {
@@ -25,35 +32,26 @@ export default function App() {
     setPosts(sorted);
   };
 
-  useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setPosts(data.posts);
-      })
-      .catch((err) => console.log(err));
-  }, [url]);
-
   return (
     <div className="App">
       <div>
         <button
           onClick={() => {
-            setUrl("http://www.mocky.io/v2/59b3f0b0100000e30b236b7e");
+            setUrl(urls[0]);
           }}
         >
           1
         </button>
         <button
           onClick={() => {
-            setUrl("http://www.mocky.io/v2/59ac28a9100000ce0bf9c236");
+            setUrl(urls[1]);
           }}
         >
           2
         </button>
         <button
           onClick={() => {
-            setUrl("http://www.mocky.io/v2/59ac293b100000d60bf9c239");
+            setUrl(urls[2]);
           }}
         >
           3
@@ -71,26 +69,7 @@ export default function App() {
         {posts.length > 1 ? (
           <div>
             {posts.map((post) => (
-              <div
-                key={post.thumbnail_image}
-                style={{
-                  display: "flex",
-                  padding: 10,
-                  justifyContent: "space-evenly",
-                }}
-              >
-                <p>{post.id}</p>
-                <img
-                  src={post.thumbnail_image}
-                  alt={post.id}
-                  style={{ width: 150 }}
-                />
-                <p>{post.event_name}</p>
-                <p>Views: {post.views}</p>
-                <p>Likes: {post.likes}</p>
-                <p>Shares: {post.shares}</p>
-                <p>{format(fromUnixTime(post.event_date), "MM/dd/yyyy")}</p>
-              </div>
+              <Post post={post} />
             ))}
           </div>
         ) : (
