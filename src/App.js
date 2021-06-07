@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./App.css";
+import "./styles/App.css";
 import Post from "./Post";
 
 export default function App() {
@@ -34,8 +34,12 @@ export default function App() {
 
   return (
     <div className="App">
-      <div>
+      <nav
+        className="relative z-0 flex rounded-md shadow-sm -space-x-px"
+        aria-label="Pagination"
+      >
         <button
+          className="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
           onClick={() => {
             setUrl(urls[0]);
           }}
@@ -43,6 +47,7 @@ export default function App() {
           1
         </button>
         <button
+          className="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
           onClick={() => {
             setUrl(urls[1]);
           }}
@@ -50,13 +55,14 @@ export default function App() {
           2
         </button>
         <button
+          className="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
           onClick={() => {
             setUrl(urls[2]);
           }}
         >
           3
         </button>
-      </div>
+      </nav>
       <div>
         <select onChange={(e) => sortArray(e.target.value)}>
           <option value="likes">Likes</option>
@@ -69,7 +75,7 @@ export default function App() {
         {posts.length > 1 ? (
           <div>
             {posts.map((post) => (
-              <Post post={post} />
+              <Post post={post} key={post.thumbnail_image} />
             ))}
           </div>
         ) : (
